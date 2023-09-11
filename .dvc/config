@@ -1,0 +1,5 @@
+[core]
+    remote = data
+    autostage = true
+['remote "data"']
+    url = ssh://nuri@nuriMain.synology.me:9222/dataset/test1
