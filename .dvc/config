@@ -1,5 +1,8 @@
 [core]
-    remote = data
+    remote = ssh-storage
     autostage = true
-['remote "data"']
-    url = ssh://nuri@nuriMain.synology.me:9222/dataset/test1
+['remote "ssh-storage"']
+    url = ssh://183.96.151.212/dvc/dataset/test1
+    port = 9222
+    user = nuri
+    keyfile = /Users/nuri/.ssh/id_rsa
