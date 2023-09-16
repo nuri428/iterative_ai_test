@@ -1,0 +1,16 @@
+stages:
+  preprocess:
+    cmd: python 1.preprocessing.py ./data/sentiment_tagged_data ./data/sentiment_preprocessed
+    deps:
+    - ./data/sentiment_tagged_data
+    outs:
+    - ./data/sentiment_preprocessed/preprocessed.json
+
+  data_split:
+    cmd: python 2.data_split.py ./data/sentiment_preprocessed/preprocessed.json ./data/sentiment_train_data/
+    deps:
+    - ./data/sentiment_preprocessed/preprocessed.json
+    outs:
+    - ./data/sentiment_train_data/train.json
+    - ./data/sentiment_train_data/test.json
+

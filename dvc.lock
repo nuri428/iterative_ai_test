@@ -1,0 +1,32 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python ./src/1.preprocessing.py ./data/sentiment_tagged_data ./data/sentiment_preprocessed
+    deps:
+    - path: ./data/sentiment_tagged_data
+      hash: md5
+      md5: f6f592279c145befca5fb24e47927647.dir
+      size: 11498215
+      nfiles: 105
+    outs:
+    - path: ./data/sentiment_preprocessed/preprocessed.json
+      hash: md5
+      md5: 541b6b106318e36bb20adb42e1cbe7d5
+      size: 7103093
+  data_split:
+    cmd: python ./src/2.data_split.py ./data/sentiment_preprocessed/preprocessed.json
+      ./data/sentiment_train_data/
+    deps:
+    - path: ./data/sentiment_preprocessed/preprocessed.json
+      hash: md5
+      md5: 541b6b106318e36bb20adb42e1cbe7d5
+      size: 7103093
+    outs:
+    - path: ./data/sentiment_train_data/test.json
+      hash: md5
+      md5: f7b9cf6589892061ad3a1f7756bd51fe
+      size: 1770518
+    - path: ./data/sentiment_train_data/train.json
+      hash: md5
+      md5: 434ce2c0c9901dc07a7bb8651911aa13
+      size: 5332628
