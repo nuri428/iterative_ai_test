@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   preprocess:
-    cmd: python ./src/1.preprocessing.py ./data/sentiment_tagged_data ./data/sentiment_preprocessed
+    cmd: python 1.preprocessing.py ./data/sentiment_tagged_data ./data/sentiment_train_data
     deps:
     - path: ./data/sentiment_tagged_data
       hash: md5
@@ -9,24 +9,33 @@ stages:
       size: 11498215
       nfiles: 105
     outs:
-    - path: ./data/sentiment_preprocessed/preprocessed.json
+    - path: ./data/sentiment_train_data/datasets.json
       hash: md5
-      md5: 541b6b106318e36bb20adb42e1cbe7d5
-      size: 7103093
+      md5: 5b204758352e2753fe141a0bba1cd46e
+      size: 7082958
   data_split:
-    cmd: python ./src/2.data_split.py ./data/sentiment_preprocessed/preprocessed.json
-      ./data/sentiment_train_data/
+    cmd: python 2.data_split.py ./data/sentiment_preprocessed/preprocessed.json ./data/sentiment_train_data/
     deps:
     - path: ./data/sentiment_preprocessed/preprocessed.json
       hash: md5
-      md5: 541b6b106318e36bb20adb42e1cbe7d5
-      size: 7103093
+      md5: aab175e4ff3e55313448647c749a562f
+      size: 7142958
     outs:
     - path: ./data/sentiment_train_data/test.json
       hash: md5
-      md5: f7b9cf6589892061ad3a1f7756bd51fe
-      size: 1770518
+      md5: b77b1d04521fbb9082e9af9dbc885a75
+      size: 1787695
     - path: ./data/sentiment_train_data/train.json
       hash: md5
-      md5: 434ce2c0c9901dc07a7bb8651911aa13
-      size: 5332628
+      md5: f15ddd4390a41a9558b2644b8f6fa22e
+      size: 5355264
+  train:
+    cmd: python 3.train.py
+    deps:
+    - path: ./data/sentiment_train_data/datasets.json
+      hash: md5
+      md5: 5b204758352e2753fe141a0bba1cd46e
+      size: 7082958
+    params:
+      params.py:
+        TrainConfig.EPOCHS: 10

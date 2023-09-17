@@ -12,17 +12,18 @@ def main(args):
         df_list.append(pd.read_json(file))
 
     df_all = pd.concat(df_list)
-    preprocessed_df = df_all[['Index','RawText','GeneralPolarity']]
-    preprocessed_df = preprocessed_df.reset_index(names=["Index"])
+    preprocessed_df = df_all[['Index','RawText','GeneralPolarity']]    
+    preprocessed_df.rename(columns={"Index":"id", "RawText":"sentence", "GeneralPolarity":"label"}, inplace=True)
+
     print(preprocessed_df.head())
     if not os.path.exists(args.predir) :
         os.mkdir(args.predir)
-    preprocessed_df.to_json(f"{args.predir}/preprocessed.json")
+    preprocessed_df.to_json(f"{args.predir}/datasets.json", orient='records')
 
 
 if __name__ == "__main__":
     argparse = argparse.ArgumentParser(description='data preprocessing')
     argparse.add_argument("datadir", type=str, default="./data/sentiment_tagged_data", help="data preprocessing")
-    argparse.add_argument("predir", type=str, default="./data/sentiment_preprocessed", help="preprocessed dir")
+    argparse.add_argument("predir", type=str, default="./data/sentiment_train_data", help="preprocessed dir")
     args = argparse.parse_args()
     main(args)

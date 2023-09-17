@@ -12,14 +12,17 @@ dvc = {extras = ["ssh"], version = "^3.19.0"}
 pandas = "^2.1.0"
 scikit-learn = "^1.3.0"
 datasets = "^2.14.5"
-transformers = "^4.33.2"
+transformers = {extras = ["torch"], version = "^4.33.2"}
 peft = "^0.5.0"
+torch = ">=2.0.0, !=2.0.1"
+huggingface-hub = "^0.17.1"
 
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^1.5.1"
 black = "^23.9.1"
 pre-commit = "^3.4.0"
+ipykernel = "^6.25.2"
 
 [build-system]
 requires = ["poetry-core"]

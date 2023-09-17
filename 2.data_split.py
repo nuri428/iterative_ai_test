@@ -13,8 +13,8 @@ def main(args):
     train, test = train_test_split(preprocessed_df)
     if not os.path.exists(args.traindir):
         os.makedirs(args.traindir)
-    train.to_json(f"{args.traindir}/train.json")
-    test.to_json(f"{args.traindir}/test.json")
+    train.to_json(f"{args.traindir}/train.json", orient='records')
+    test.to_json(f"{args.traindir}/test.json", orient='records')
 
 
 if __name__ == "__main__":

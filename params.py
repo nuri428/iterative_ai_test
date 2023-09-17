@@ -2,6 +2,7 @@ MODEL = "distilbert-base-uncased"
 
 class TrainConfig:
     EPOCHS = 10 
+    BATCH_SIZE = 16
     LEARNING_RATE = 2e-5 
     PER_DEVICE_TRAIN_BATCH_SIZE=16
     PER_DEVICE_EVAL_BATCH_SIZE=16
