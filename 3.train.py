@@ -95,4 +95,4 @@ trainer = Trainer(
 )
 trainer.add_callback(DVCLiveCallback(save_dvc_exp=True))
 trainer.train()
-model.save_pretrained(params["TrainConfig"]["MODEL"])
+model.save_pretrained(model_checkpoint)

@@ -38,10 +38,18 @@ stages:
     deps:
     - path: ./data/sentiment_train_data/datasets.json
       hash: md5
-      md5: f13c7946b93ecc8ad35b53a08eb11ad1
-      size: 7082958
+      md5: d5ef4e5f8f6efdaa1670f4e8d779dde1
+      size: 7003622
+    - path: 3.train.py
+      hash: md5
+      md5: a0c95e2bf1a169107fb95ce429d1cb3d
+      size: 3479
     params:
       params.py:
         MODEL: distilbert-base-uncased
         TrainConfig.BATCH_SIZE: 16
         TrainConfig.EPOCHS: 10
+        TrainConfig.LEARNING_RATE: 2e-05
+        TrainConfig.PER_DEVICE_EVAL_BATCH_SIZE: 16
+        TrainConfig.PER_DEVICE_TRAIN_BATCH_SIZE: 16
+        TrainConfig.WEIGHT_DECAY: 0.01
