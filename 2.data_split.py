@@ -9,7 +9,10 @@ random.seed = 0
 
 def main(args):
     
+    emotion_map = {-1:'neg',0:'neu',1:'pos'}
+    
     preprocessed_df = pd.read_json(args.pre_data)
+    preprocessed_df['label'] = preprocessed_df['label'].map(emotion_map)
     train, test = train_test_split(preprocessed_df)
     if not os.path.exists(args.traindir):
         os.makedirs(args.traindir)

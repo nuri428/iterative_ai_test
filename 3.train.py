@@ -1,18 +1,19 @@
 import dvc.api 
-
+from dvclive.huggingface import DVCLiveCallback
 from transformers import TrainingArguments, Trainer
-from datasets import load_dataset, load_metric
+from datasets import load_dataset, load_metric, Features, Value, ClassLabel
 from transformers import AutoTokenizer
 from transformers import DataCollatorWithPadding
 from transformers import AutoModelForSequenceClassification
 from peft import get_peft_model, LoraConfig, TaskType 
+import numpy as np 
 # from huggingface_hub import login
 # login()
 
 params = dvc.api.params_show()
 print(params)
 
-exit()
+# exit()
 task_to_keys = {
     "cola": ("sentence", None),
     "mnli": ("premise", "hypothesis"),
@@ -31,31 +32,54 @@ task = "cola"
 model_checkpoint = params["MODEL"]
 batch_size = params["TrainConfig"]["BATCH_SIZE"]
 
+# id2label = {-1: "NEGATIVE", 0:"NEUTRAL", 1: "POSITIVE"}
+# label2id = {"NEGATIVE": -1, "NEUTRAL":0, "POSITIVE": 1}
+id2label = {0:'neg',1:'neu',2:'pos'}
+label2id = {'neg':0,'neu':1,'pos':2}
 
 def preprocess_function(examples):
-    return tokenizer(examples["RawText"], truncation=True)
+    return tokenizer(examples["sentence"], truncation=True)
 
-model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint, num_labels=2),
 
+def compute_metrics(eval_pred):
+    predictions, labels = eval_pred
+    predictions = np.argmax(predictions, axis=1)
+    return accuracy.compute(predictions=predictions, references=labels)
+
+model = AutoModelForSequenceClassification.from_pretrained(model_checkpoint, num_labels=3) #id2label=id2label, label2id=label2id)
 tokenizer = AutoTokenizer.from_pretrained(model_checkpoint)
-
 data_collator = DataCollatorWithPadding(tokenizer=tokenizer)
 
-dataset = load_dataset("json", data_file= "./data/sentiment_train_data/datasets.json")
+ClassLabels = ClassLabel(num_classes=3, names=['neg','neu','pos'])
+
+emotion_features = Features({'id':Value(dtype='int32'),
+                             'sentence': Value(dtype='string'), 
+                             'label': ClassLabels})
+
+dataset = load_dataset("json", 
+                       features=emotion_features,
+                       data_files= "./data/sentiment_train_data/datasets.json", )
+dataset = dataset.map(preprocess_function, batched=True)
+dataset = dataset.cast_column('label', ClassLabels)
 
 
-tf_dataset = dataset.to_tf_dataset(
-    columns=['attention_mask', 'input_ids', 'label'],
-    shuffle=True,
-    batch_size=16,
-    collate_fn=data_collator,
-)
+# Mapping Labels to IDs
+def map_label2id(example):
+    example['label'] = ClassLabels.str2int(example['label'])
+    return example
 
+dataset = dataset.map(map_label2id, batched=True)
+dataset.set_format(type="torch", columns=['attention_mask', 'input_ids', 'label'])
+
+# print(len(dataset["train"].features["label"]))
+print(dataset)
+print(dataset["train"].features["label"])
+ 
 training_args = TrainingArguments(
     output_dir='./results',
     learning_rate=params["TrainConfig"]["LEARNING_RATE"],
     per_device_train_batch_size=params["TrainConfig"]["PER_DEVICE_TRAIN_BATCH_SIZE"],
-    per_device_eval_batch_size=params["TrainConfig"]["PER_DEVICE_EVAL_BATCH_SIZE"],
+    # per_device_eval_batch_size=params["TrainConfig"]["PER_DEVICE_EVAL_BATCH_SIZE"],
     num_train_epochs=params["TrainConfig"]["EPOCHS"],
     weight_decay=params["TrainConfig"]["WEIGHT_DECAY"],
 )
@@ -63,11 +87,12 @@ training_args = TrainingArguments(
 trainer = Trainer(
     model=model,
     args=training_args,
-    train_dataset=train_dataset,
-    eval_dataset=test_dataset,
+    train_dataset=dataset['train'],
+    # eval_dataset=dataset['eval'],
     tokenizer=tokenizer,
     data_collator=data_collator,
+    compute_metrics=compute_metrics
 )
-
+trainer.add_callback(DVCLiveCallback(save_dvc_exp=True))
 trainer.train()
-model.save_pretrained(params["Train"]["MODEL"])
+model.save_pretrained(params["TrainConfig"]["MODEL"])

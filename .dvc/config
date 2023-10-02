@@ -5,4 +5,4 @@
     url = ssh://nuriMain.synology.me/dvc/dataset/test1
     port = 9222
     user = nuri
-    keyfile = /Users/nuri/.ssh/id_rsa
+    keyfile = /home/nuri/.ssh/id_rsa

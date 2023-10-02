@@ -8,11 +8,15 @@ stages:
       md5: f6f592279c145befca5fb24e47927647.dir
       size: 11498215
       nfiles: 105
+    - path: 1.preprocessing.py
+      hash: md5
+      md5: 588099858531814e476826d17dff3797
+      size: 1340
     outs:
     - path: ./data/sentiment_train_data/datasets.json
       hash: md5
-      md5: 5b204758352e2753fe141a0bba1cd46e
-      size: 7082958
+      md5: d5ef4e5f8f6efdaa1670f4e8d779dde1
+      size: 7003622
   data_split:
     cmd: python 2.data_split.py ./data/sentiment_preprocessed/preprocessed.json ./data/sentiment_train_data/
     deps:
@@ -34,8 +38,10 @@ stages:
     deps:
     - path: ./data/sentiment_train_data/datasets.json
       hash: md5
-      md5: 5b204758352e2753fe141a0bba1cd46e
+      md5: f13c7946b93ecc8ad35b53a08eb11ad1
       size: 7082958
     params:
       params.py:
+        MODEL: distilbert-base-uncased
+        TrainConfig.BATCH_SIZE: 16
         TrainConfig.EPOCHS: 10
