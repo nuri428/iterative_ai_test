@@ -11,7 +11,7 @@ import numpy as np
 # login()
 
 params = dvc.api.params_show()
-print(params)
+# print(params)
 
 # exit()
 task_to_keys = {
@@ -95,4 +95,4 @@ trainer = Trainer(
 )
 trainer.add_callback(DVCLiveCallback(save_dvc_exp=True))
 trainer.train()
-model.save_pretrained(model_checkpoint)
+model.save_pretrained(params["TRAINED_MODEL"])

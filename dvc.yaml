@@ -15,6 +15,7 @@ stages:
     params:
       - params.py:
         - MODEL
+        - TRAINED_MODEL
         - TrainConfig.EPOCHS
         - TrainConfig.BATCH_SIZE
         - TrainConfig.LEARNING_RATE

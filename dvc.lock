@@ -42,14 +42,15 @@ stages:
       size: 7003622
     - path: 3.train.py
       hash: md5
-      md5: a0c95e2bf1a169107fb95ce429d1cb3d
-      size: 3479
+      md5: 5c288b607e438854577640c06e4431e0
+      size: 3488
     params:
       params.py:
         MODEL: distilbert-base-uncased
+        TRAINED_MODEL: sentiment_classification
         TrainConfig.BATCH_SIZE: 16
         TrainConfig.EPOCHS: 10
-        TrainConfig.LEARNING_RATE: 2e-05
+        TrainConfig.LEARNING_RATE: 3e-05
         TrainConfig.PER_DEVICE_EVAL_BATCH_SIZE: 16
         TrainConfig.PER_DEVICE_TRAIN_BATCH_SIZE: 16
         TrainConfig.WEIGHT_DECAY: 0.01
