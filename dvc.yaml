@@ -1,6 +1,6 @@
 stages:
   preprocess:
-    cmd: python 1.preprocessing.py ./data/sentiment_tagged_data ./data/sentiment_train_data
+    cmd: poetry run python 1.preprocessing.py ./data/sentiment_tagged_data ./data/sentiment_train_data
     deps:
     - 1.preprocessing.py
     - ./data/sentiment_tagged_data
@@ -8,10 +8,15 @@ stages:
     - ./data/sentiment_train_data/datasets.json
 
   train:
-    cmd: python 3.train.py
+    cmd: poetry run python 3.train.py
     deps:
-    - 3.train.py
-    - ./data/sentiment_train_data/datasets.json
+      - 3.train.py
+      - params.py
+      - ./data/sentiment_train_data/datasets.json
+    outs:
+      - models/sentiment_classification
+      # - models/sentiment_classification.mlem:
+      #   cache: false
     params:
       - params.py:
         - MODEL
