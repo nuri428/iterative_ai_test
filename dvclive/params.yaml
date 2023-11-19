@@ -12,7 +12,7 @@ per_gpu_eval_batch_size:
 gradient_accumulation_steps: 1
 eval_accumulation_steps:
 eval_delay: 0
-learning_rate: 2e-05
+learning_rate: 3e-05
 weight_decay: 0.01
 adam_beta1: 0.9
 adam_beta2: 0.999
@@ -26,7 +26,7 @@ warmup_steps: 0
 log_level: passive
 log_level_replica: warning
 log_on_each_node: true
-logging_dir: ./results/runs/Oct02_00-29-11_nuriserver
+logging_dir: ./results/runs/Oct05_15-07-11_nuriserver
 logging_strategy: steps
 logging_first_step: false
 logging_steps: 500
