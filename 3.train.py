@@ -87,13 +87,12 @@ trainer = Trainer(
     model=model,
     args=training_args,
     train_dataset=dataset['train'],
-    # eval_dataset=dataset['eval'],
     tokenizer=tokenizer,
     data_collator=data_collator,
     compute_metrics=compute_metrics
 )
 trainer.add_callback(DVCLiveCallback(save_dvc_exp=True))
 trainer.train()
-model.save_pretrained(params["TRAINED_MODEL"])
+model.save_pretrained(f"models/{params['TRAINED_MODEL']}")
 # model.save()
 # save(model, f"models/{params['TRAINED_MODEL']}")
