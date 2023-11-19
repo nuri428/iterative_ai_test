@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   preprocess:
-    cmd: python 1.preprocessing.py ./data/sentiment_tagged_data ./data/sentiment_train_data
+    cmd: poetry run python 1.preprocessing.py ./data/sentiment_tagged_data ./data/sentiment_train_data
     deps:
     - path: ./data/sentiment_tagged_data
       hash: md5
@@ -42,8 +42,12 @@ stages:
       size: 7003622
     - path: 3.train.py
       hash: md5
-      md5: 5c288b607e438854577640c06e4431e0
-      size: 3488
+      md5: 026c13f56605ec1efae871fffc7507a0
+      size: 3327
+    - path: params.py
+      hash: md5
+      md5: 7d0d4b1ad666235bb8a506d3bb4ab8dc
+      size: 273
     params:
       params.py:
         MODEL: distilbert-base-uncased
